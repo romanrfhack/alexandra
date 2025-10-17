@@ -11,9 +11,17 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 relative z-10 text-center animate-fade-in">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-primary-foreground drop-shadow-lg">
-            Alexandra
-          </h1>
+          {/* Logo en lugar del texto con fondo blanco transparente */}
+          <div className="flex justify-center mb-6">
+            <div className="bg-white/30 p-4 rounded-2xl">
+              <img 
+                src="/images/logoFondo.webp" 
+                alt="Alexandra - Especialista en Belleza"
+                className="max-w-[280px] md:max-w-[400px] lg:max-w-[500px] w-full h-auto drop-shadow-lg"
+              />
+            </div>
+          </div>
+          
           <p className="text-2xl md:text-3xl mb-4 text-primary-foreground/95 font-light">
             Especialista en Belleza
           </p>

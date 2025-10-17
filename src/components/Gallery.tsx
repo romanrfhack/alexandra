@@ -6,7 +6,7 @@ const Gallery = () => {
     "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?q=80&w=800",
     "/images/gallery/foto2.webp",
     "/images/gallery/foto3.webp",
-    "/images/gallery/foto4.webp",
+    "/images/gallery/foto4.webp",    
   ];
 
   return (
