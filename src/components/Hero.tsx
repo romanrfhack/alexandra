@@ -15,7 +15,7 @@ const Hero = () => {
           <div className="flex justify-center mb-6">
             <div className="bg-white/30 p-4 rounded-2xl">
               <img 
-                src="/images/logoFondo.webp" 
+                src="/images/logoFondo1.webp" 
                 alt="Alexandra - Especialista en Belleza"
                 className="max-w-[280px] md:max-w-[400px] lg:max-w-[500px] w-full h-auto drop-shadow-lg"
               />
