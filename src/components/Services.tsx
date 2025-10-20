@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { LucideIcon } from "lucide-react";
@@ -193,6 +193,9 @@ const ServiceCard = ({ item, index }: { item: ServiceItem; index: number }) => {
 };
 
 const Services = () => {
+  // Estado para controlar la categoría activa (Tabs controlado)
+  const [active, setActive] = useState<string>("todos");
+
   // Aplana todos los servicios para una vista "Todos"
   const allServices = useMemo<ServiceItem[]>(
     () => categories.flatMap((c) => c.items),
@@ -210,20 +213,39 @@ const Services = () => {
           </p>
         </div>
 
-        {/* Tabs de categorías */}
-        <Tabs defaultValue="todos" className="max-w-7xl mx-auto">
-          <TabsList className="flex flex-wrap gap-2 justify-center">
-            <TabsTrigger value="todos">Todos</TabsTrigger>
+        {/* Select móvil para facilitar navegación */}
+        <div className="md:hidden mb-4">
+          <label htmlFor="service-category" className="sr-only">Categoría</label>
+          <select
+            id="service-category"
+            className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm"
+            value={active}
+            onChange={(e) => setActive(e.target.value)}
+          >
+            <option value="todos">Todos</option>
+            {categories.map((c) => (
+              <option key={c.key} value={c.key}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Tabs desktop/tablet con scroll horizontal en overflow */}
+        <Tabs value={active} onValueChange={setActive} className="max-w-7xl mx-auto">
+          <TabsList className="hidden md:flex gap-2 justify-start overflow-x-auto no-scrollbar -mx-4 px-4">
+            <TabsTrigger value="todos" className="whitespace-nowrap">Todos</TabsTrigger>
             {categories.map((cat) => (
-              <TabsTrigger key={cat.key} value={cat.key}>
+              <TabsTrigger key={cat.key} value={cat.key} className="whitespace-nowrap">
                 {cat.name}
               </TabsTrigger>
             ))}
           </TabsList>
+          <TabsList className="hidden" />
 
           {/* Contenido: Todos */}
-          <TabsContent value="todos" className="mt-8">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <TabsContent value="todos" className="mt-6 md:mt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
               {allServices.map((s, i) => (
                 <ServiceCard key={`all-${i}`} item={s} index={i} />
               ))}
@@ -232,13 +254,13 @@ const Services = () => {
 
           {/* Contenido por categoría */}
           {categories.map((cat) => (
-            <TabsContent key={cat.key} value={cat.key} className="mt-8">
+            <TabsContent key={cat.key} value={cat.key} className="mt-6 md:mt-8">
               {cat.blurb && (
-                <p className="text-center text-muted-foreground mb-6 max-w-3xl mx-auto">
+                <p className="text-center text-muted-foreground mb-4 md:mb-6 max-w-3xl mx-auto">
                   {cat.blurb}
                 </p>
               )}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {cat.items.map((s, i) => (
                   <ServiceCard key={`${cat.key}-${i}`} item={s} index={i} />
                 ))}
