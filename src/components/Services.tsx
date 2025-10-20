@@ -1,23 +1,10 @@
 import { useMemo, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { LucideIcon } from "lucide-react";
-import {
-  Sparkles,
-  Award,
-  Home,
-  Clock,
-  Brush,
-  Scissors,
-  Hand,
-  Layers,
-  Eye,
-  Wand2,
-} from "lucide-react";
 
 // Tipos de datos
 interface ServiceItem {
-  icon: LucideIcon;
+  imageUrl?: string; // imagen opcional específica del servicio
   title: string;
   description: string;
 }
@@ -29,7 +16,22 @@ interface ServiceCategory {
   items: ServiceItem[];
 }
 
-// Datos organizados por categoría
+// Utilidad: imagen de ejemplo por título si no se proporcionó explícitamente
+const getPlaceholderImage = (title: string) => {
+  const t = title.toLowerCase();
+  if (t.includes("podolog")) return "https://picsum.photos/seed/podologia/1200/800";
+  if (t.includes("manicure") || t.includes("manicura")) return "https://picsum.photos/seed/manicure/1200/800";
+  if (t.includes("pedicure") || t.includes("pedicura")) return "https://picsum.photos/seed/pedicure/1200/800";
+  if (t.includes("esculturales") || t.includes("tips")) return "https://picsum.photos/seed/unias/1200/800";
+  if (t.includes("gelish") || t.includes("gel")) return "https://picsum.photos/seed/gelish/1200/800";
+  if (t.includes("pestañ") || t.includes("lash")) return "https://picsum.photos/seed/lashes/1200/800";
+  if (t.includes("ceja")) return "https://picsum.photos/seed/cejas/1200/800";
+  if (t.includes("depilación") || t.includes("depilacion")) return "https://picsum.photos/seed/depilacion/1200/800";
+  if (t.includes("domicilio")) return "https://picsum.photos/seed/domicilio/1200/800";
+  return "https://picsum.photos/seed/beauty/1200/800";
+};
+
+// Datos organizados por categoría (algunas con imageUrl de ejemplo)
 const categories: ServiceCategory[] = [
   {
     key: "manos-pies",
@@ -37,19 +39,18 @@ const categories: ServiceCategory[] = [
     blurb: "Cuidado integral con técnicas profesionales, higiene estricta y productos de alto rendimiento.",
     items: [
       {
-        icon: Hand,
+        imageUrl: "https://picsum.photos/seed/manosypies/1200/800",
         title: "Manicure & Pedicure Profesional",
         description:
           "Limpieza, limado, cutícula y esmaltado con hidratación profunda para manos y pies impecables.",
       },
       {
-        icon: Scissors,
+        imageUrl: "https://picsum.photos/seed/podologia-cuidado/1200/800",
         title: "Podología Básica",
         description:
           "Atención especializada para el bienestar de tus pies: corte correcto, prevención de molestias comunes y recomendaciones de cuidado.",
       },
       {
-        icon: Brush,
         title: "Manicura y Pedicura Estética",
         description:
           "Acabado perfecto y pulido profesional para realzar tu estilo en cualquier ocasión.",
@@ -62,19 +63,17 @@ const categories: ServiceCategory[] = [
     blurb: "Técnicas avanzadas para sets personalizados, resistentes y artísticos.",
     items: [
       {
-        icon: Award,
+        imageUrl: "https://picsum.photos/seed/esculturales3d/1200/800",
         title: "Uñas Esculturales con Diseño 3D",
         description:
           "Extensión y estructura profesional con arte a mano alzada y detalles 3D para un look único.",
       },
       {
-        icon: Layers,
         title: "Aplicación con Tips",
         description:
           "Extensión sobre uña natural con tips de alta calidad para longitudes y formas uniformes.",
       },
       {
-        icon: Wand2,
         title: "Sellos & Decoración Artística",
         description:
           "Stamping, líneas finas, foils, glitter y efectos especiales para personalizar cada set.",
@@ -87,13 +86,12 @@ const categories: ServiceCategory[] = [
     blurb: "Durabilidad y brillo de salón que cuidan tu uña natural.",
     items: [
       {
-        icon: Sparkles,
+        imageUrl: "https://picsum.photos/seed/gelish21/1200/800",
         title: "Gelish 21 Días (Liso o Decorado)",
         description:
           "Esmaltado semipermanente sobre uña natural con sellado profesional y alto brillo por semanas.",
       },
       {
-        icon: Layers,
         title: "Refuerzo y Sellado Profesional",
         description:
           "Técnicas de refuerzo para prolongar la duración y mantener el acabado impecable.",
@@ -106,25 +104,23 @@ const categories: ServiceCategory[] = [
     blurb: "Mirada definida con acabados a medida de la forma de tus ojos.",
     items: [
       {
-        icon: Eye,
         title: "Extensiones Naturales",
         description:
           "Efecto sutil y elegante que realza tu mirada sin perder naturalidad.",
       },
       {
-        icon: Eye,
+        imageUrl: "https://picsum.photos/seed/volumen/1200/800",
         title: "Extensiones Híbridas y de Volumen",
         description:
           "Mayor densidad y definición con diseño personalizado (clásicas, híbridas, volumen).",
       },
       {
-        icon: Eye,
         title: "Lash Lifting & Laminado de Pestañas",
         description:
           "Levantamiento y moldeado de tus pestañas naturales para un rizo duradero sin extensiones.",
       },
       {
-        icon: Brush,
+        imageUrl: "https://picsum.photos/seed/cejas/1200/800",
         title: "Diseño y Depilación de Cejas",
         description:
           "Perfilado preciso para armonizar tus rasgos; puede incluir tinte o henna a solicitud.",
@@ -137,13 +133,11 @@ const categories: ServiceCategory[] = [
     blurb: "Piel suave con técnicas cuidadosas para zonas delicadas.",
     items: [
       {
-        icon: Scissors,
         title: "Bozo y Rostro Completo",
         description:
           "Depilación precisa y gentil que deja la piel uniforme y tersa.",
       },
       {
-        icon: Scissors,
         title: "Cejas, Axilas y Zonas Delicadas",
         description:
           "Procedimiento profesional con productos de calidad para minimizar irritación.",
@@ -156,13 +150,12 @@ const categories: ServiceCategory[] = [
     blurb: "Comodidad y flexibilidad para tu agenda.",
     items: [
       {
-        icon: Home,
+        imageUrl: "https://picsum.photos/seed/domicilio/1200/800",
         title: "Servicio a Domicilio",
         description:
           "Atención personalizada en tu hogar con todos los implementos necesarios y protocolos de higiene.",
       },
       {
-        icon: Clock,
         title: "Horarios Flexibles",
         description:
           "Agenda tu cita cuando mejor se adapte a tu rutina.",
@@ -171,17 +164,17 @@ const categories: ServiceCategory[] = [
   },
 ];
 
-// Componente de tarjeta de servicio
+// Componente de tarjeta de servicio con imagen de encabezado
 const ServiceCard = ({ item, index }: { item: ServiceItem; index: number }) => {
-  const Icon = item.icon;
+  const cover = item.imageUrl ?? getPlaceholderImage(item.title);
   return (
     <Card
       className="border-border/50 hover:border-primary transition-all duration-300 hover:shadow-elegant animate-slide-in"
       style={{ animationDelay: `${index * 0.06}s` }}
     >
       <CardHeader>
-        <div className="w-14 h-14 rounded-full bg-gradient-primary flex items-center justify-center mb-4 shadow-soft">
-          <Icon className="h-7 w-7 text-primary-foreground" />
+        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl mb-4 shadow-soft">
+          <img src={cover} alt={item.title} className="h-full w-full object-cover" loading="lazy" />
         </div>
         <CardTitle className="text-lg md:text-xl">{item.title}</CardTitle>
       </CardHeader>
@@ -193,14 +186,10 @@ const ServiceCard = ({ item, index }: { item: ServiceItem; index: number }) => {
 };
 
 const Services = () => {
-  // Estado para controlar la categoría activa (Tabs controlado)
   const [active, setActive] = useState<string>("todos");
 
   // Aplana todos los servicios para una vista "Todos"
-  const allServices = useMemo<ServiceItem[]>(
-    () => categories.flatMap((c) => c.items),
-    []
-  );
+  const allServices = useMemo<ServiceItem[]>(() => categories.flatMap((c) => c.items), []);
 
   return (
     <section id="servicios" className="py-20 bg-muted/30">
@@ -241,7 +230,6 @@ const Services = () => {
               </TabsTrigger>
             ))}
           </TabsList>
-          <TabsList className="hidden" />
 
           {/* Contenido: Todos */}
           <TabsContent value="todos" className="mt-6 md:mt-8">
