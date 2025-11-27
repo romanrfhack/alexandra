@@ -304,27 +304,42 @@ const Services = () => {
         </Tabs>
 
          {/* Modal para imagen ampliada */}
-        <Dialog open={!!selectedImage} onOpenChange={handleCloseModal}>
-          <DialogContent className="max-w-[95vw] max-h-[95vh] w-auto h-auto p-0 overflow-hidden bg-transparent border-none">
-            <DialogTitle className="sr-only">
-              {selectedImage?.title || "Imagen ampliada"}
-            </DialogTitle>
-            <div className="flex items-center justify-center w-full h-full p-4">
-              {selectedImage && (
-                <div className="relative w-full h-full flex items-center justify-center">
-                  <img 
-                    src={selectedImage.url} 
-                    alt={selectedImage.title}
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-                  />
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-4 py-2 rounded-lg text-sm">
-                    {selectedImage.title}
-                  </div>
-                </div>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
+        {selectedImage && (
+  <div 
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-2 md:p-4"
+    onClick={handleCloseModal}
+  >
+    {/* Botón de cerrar */}
+    <button 
+      className="absolute top-3 right-3 z-20 bg-black/70 hover:bg-black/90 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors text-lg font-bold"
+      onClick={handleCloseModal}
+    >
+      ×
+    </button>
+    
+    {/* Contenedor de la imagen */}
+    <div 
+      className="relative w-full h-full flex items-center justify-center"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <img 
+        src={selectedImage.url} 
+        alt={selectedImage.title}
+        className="w-auto h-auto object-contain"
+        style={{ 
+          maxWidth: 'calc(100vw - 20px)',
+          maxHeight: 'calc(100vh - 20px)'
+        }}
+      />
+      
+      {/* Título en la parte inferior */}
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded-md text-sm backdrop-blur-sm max-w-[90vw] text-center">
+        {selectedImage.title}
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </section>
   );
