@@ -138,16 +138,10 @@ const categories: ServiceCategory[] = [
     key: "depilacion",
     name: "Depilación Facial & Corporal",
     blurb: "Piel suave con técnicas cuidadosas para zonas delicadas.",
-    items: [
-      {
-        imageUrl: "/images/gallery/depilacion - Bozo y Rostro Completo.webp",
-        title: "Bozo y Rostro Completo",
-        description:
-          "Depilación precisa y gentil que deja la piel uniforme y tersa.",
-      },
+    items: [      
       {
         imageUrl: "/images/gallery/depilacion - Cejas, Axilas y Zonas Delicadas.webp",
-        title: "Cejas, Axilas y Zonas Delicadas",
+        title: "Depilación de Cejas, Bozo, Axilas, pierna completa y Area de Bikini",
         description:
           "Procedimiento profesional con productos de calidad para minimizar irritación.",
       },
